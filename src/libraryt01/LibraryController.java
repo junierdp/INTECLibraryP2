@@ -728,7 +728,25 @@ public class LibraryController {
         option = this.returnIntValue("Seleccione una opción del menú: ");
         
         if (this.validateOptions(option, 1, 3)) {
-            
+            switch (option) {
+                case 1:
+                    List<String> data = new ArrayList<>();
+                    for (Catalog catalog : LibraryController.catalogs) {
+                        for (Book book : catalog.getBooks()) {
+                            String[] _data = {catalog.getName(), book.getName(), book.getAuthors()};
+                            data.add(catalog.getName());
+                            data.add(book.getName());
+                            data.add(book.getAuthors());
+                        }
+                    }
+                    PDFReport pdf = new PDFReport();
+                    pdf.generateReport(data);
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;            
+            }
         } else {
             System.out.println("Opción incorrecta.");
             this.showReportMenu();
