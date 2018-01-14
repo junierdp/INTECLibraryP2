@@ -1,9 +1,11 @@
 package libraryt01;
 
+import libraryt01.Reports.PDFReport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.io.*;
+import libraryt01.Reports.CSVReport;
 
 /**
  *
@@ -31,7 +33,7 @@ public class LibraryController {
             }
             
             this.loadSavedData();
-        }catch(Exception e){
+        }catch(IOException e){
             System.out.println("Error cargando archivos." + e.toString());
         }
     }
@@ -354,7 +356,7 @@ public class LibraryController {
                 LibraryController.get.searchProductByISBN(catalog);
                 break;
             case 8:
-                this.print("El programa se ha cerrado.");
+                this.print("Has salido de administrar catalogo.");
                 break;
         }
     }
@@ -728,7 +730,18 @@ public class LibraryController {
         option = this.returnIntValue("Seleccione una opción del menú: ");
         
         if (this.validateOptions(option, 1, 3)) {
-            
+            switch (option) {
+                case 1:
+                    PDFReport pdf = new PDFReport();
+                    pdf.generateReport(LibraryController.catalogs);
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    CSVReport csv = new CSVReport();
+                    csv.generateCSVReport(LibraryController.catalogs);
+                    break;            
+            }
         } else {
             System.out.println("Opción incorrecta.");
             this.showReportMenu();
