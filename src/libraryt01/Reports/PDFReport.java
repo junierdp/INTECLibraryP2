@@ -3,20 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package libraryt01;
+package libraryt01.Reports;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.BidiLine;
-
 import java.io.*;
 import java.util.List;
+import libraryt01.Book;
+import libraryt01.Catalog;
+import libraryt01.LibraryController;
+
 /**
  *
  * @author JunierDP
@@ -30,10 +31,10 @@ public class PDFReport {
     
     }
     
-    public void generateReport(List<String> books) {
+    public void generateReport(List<Catalog> catalogs) {
         Document document = new Document();
         try {
-            route = dir.getCanonicalPath() + "/src/libraryt01/report.pdf";
+            route = dir.getCanonicalPath() + "/src/libraryt01/Reports/report.pdf";
             
             FileOutputStream file = new FileOutputStream(route);
             
@@ -49,9 +50,13 @@ public class PDFReport {
             
             PdfPTable table = new PdfPTable(3);
             
-            books.forEach((data) -> {
-                table.addCell(data);
-            });
+            for (Catalog catalog : catalogs) {
+                for (Book book: catalog.getBooks()) {
+                    table.addCell(catalog.getName());
+                    table.addCell(book.getName());
+                    table.addCell(book.getAuthors());
+                }
+            }
             
             document.add(table);
             
