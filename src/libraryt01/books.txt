@@ -1,4 +1,2 @@
 1|a|a|a|a|a|a|1
 2|b|b|b|b|b|b|1
-1|q|qqqq|q|q|q|q|1
-4|sdf|sdfg|sdf|sdf|sdf|sdg|1
