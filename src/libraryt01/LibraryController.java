@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.io.*;
 import libraryt01.Reports.CSVReport;
+import libraryt01.Reports.EXCELReport;
 
 /**
  *
@@ -736,6 +737,8 @@ public class LibraryController {
                     pdf.generateReport(LibraryController.catalogs);
                     break;
                 case 2:
+                    EXCELReport excel = new EXCELReport();
+                    excel.generateReport(LibraryController.catalogs);
                     break;
                 case 3:
                     CSVReport csv = new CSVReport();
