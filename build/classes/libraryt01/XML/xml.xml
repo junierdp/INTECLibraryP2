@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<catalogos>
+    <catalogo>
+        <nombre>Prueba</nombre>
+        <libros>
+            <libro>
+                <autor>a</autor>
+                <nombre>a</nombre>
+                <edicion>a</edicion>
+                <isbn>a</isbn>
+                <fecha>a</fecha>
+                <ciudad>a</ciudad>
+            </libro>
+            <libro>
+                <autor>b</autor>
+                <nombre>b</nombre>
+                <edicion>b</edicion>
+                <isbn>b</isbn>
+                <fecha>b</fecha>
+                <ciudad>b</ciudad>
+            </libro>
+        </libros>
+    </catalogo>
+    <catalogo>
+        <nombre>Prueba 2</nombre>
+        <libros/>
+    </catalogo>
+    <libros/>
+</catalogos>

@@ -3,6 +3,10 @@ package libraryt01;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.LinkedHashMap;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 import org.json.simple.JSONStreamAware;
 import org.json.simple.JSONValue;
 
@@ -17,6 +21,9 @@ import org.json.simple.JSONValue;
  * - Fecha
  * - Ciudad
  */
+
+@XmlRootElement(name="libro")
+@XmlType(propOrder={"authors", "name", "ediction", "isbn", "date", "city"})
 public class Book implements JSONStreamAware {
     
     private int id;
@@ -63,6 +70,7 @@ public class Book implements JSONStreamAware {
         this.catalogId = catalogId;
     }
     
+    @XmlTransient
     public int getId() {
         return id;
     }
@@ -71,6 +79,7 @@ public class Book implements JSONStreamAware {
         this.id = id;
     }
 
+    @XmlElement(name="autor")
     public String getAuthors() {
         return authors;
     }
@@ -79,6 +88,7 @@ public class Book implements JSONStreamAware {
         this.authors = author;
     }
 
+    @XmlElement(name="nombre")
     public String getName() {
         return name;
     }
@@ -87,6 +97,7 @@ public class Book implements JSONStreamAware {
         this.name = name;
     }
 
+    @XmlElement(name="edicion")
     public String getEdiction() {
         return ediction;
     }
@@ -95,6 +106,7 @@ public class Book implements JSONStreamAware {
         this.ediction = ediction;
     }
 
+    @XmlElement(name="isbn")
     public String getIsbn() {
         return isbn;
     }
@@ -103,6 +115,7 @@ public class Book implements JSONStreamAware {
         this.isbn = isbn;
     }
 
+    @XmlElement(name="fecha")
     public String getDate() {
         return date;
     }
@@ -111,6 +124,7 @@ public class Book implements JSONStreamAware {
         this.date = date;
     }
 
+    @XmlElement(name="ciudad")
     public String getCity() {
         return city;
     }
@@ -119,6 +133,7 @@ public class Book implements JSONStreamAware {
         this.city = city;
     }
 
+    @XmlTransient
     public int getCatalogId() {
         return catalogId;
     }

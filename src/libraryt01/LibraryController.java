@@ -9,6 +9,8 @@ import libraryt01.JSON.ExportJSON;
 import libraryt01.JSON.ImportJSON;
 import libraryt01.Reports.CSVReport;
 import libraryt01.Reports.EXCELReport;
+import libraryt01.XML.ExportXML;
+import libraryt01.XML.ImportXML;
 
 /**
  *
@@ -16,7 +18,7 @@ import libraryt01.Reports.EXCELReport;
  */
 public class LibraryController {
     
-    public static List<Catalog> catalogs = new ArrayList<>();
+    public static Catalog catalogs = new Catalog();
     public static int bookCount = 0;
     
     public static LibraryController get = new LibraryController();
@@ -24,6 +26,7 @@ public class LibraryController {
     private String bookRoute = "";
         
     public LibraryController() {
+        LibraryController.catalogs.setCatalogs(new ArrayList<Catalog>());
         File mydir = new File(".");
         try{
             this.catalogRoute = mydir.getCanonicalPath() + "/src/libraryt01/catalogs.txt"; 
@@ -73,7 +76,7 @@ public class LibraryController {
                     }
                 }
                 
-                LibraryController.catalogs.add(catalog);
+                LibraryController.catalogs.getCatalogs().add(catalog);
             }
             
             bookBufferedReader.close();
@@ -96,7 +99,7 @@ public class LibraryController {
             FileWriter bookFileWriter = new FileWriter(new File(this.bookRoute));
             BufferedWriter bookBufferedWriter = new BufferedWriter(bookFileWriter);
             
-            for (Catalog catalog : LibraryController.catalogs) {
+            for (Catalog catalog : LibraryController.catalogs.getCatalogs()) {
                 catalogBufferedWriter.write(catalog.getId() + "|" + catalog.getName());
                 catalogBufferedWriter.newLine();
                 
@@ -128,18 +131,21 @@ public class LibraryController {
         this.print("Agregar nuevo catalogo");
         
         catalog.setName(this.returnStringValue("Nombre del catalogo: "));
-        if (LibraryController.catalogs.size() > 0){
-            catalog.setId(LibraryController.catalogs.get(LibraryController.catalogs.size() - 1).getId() + 1);
+        if (LibraryController.catalogs.getCatalogs().size() > 0){
+            catalog.setId(LibraryController.catalogs.getCatalogs().get(LibraryController.catalogs.getCatalogs().size() - 1).getId() + 1);
         } else {
             catalog.setId(1);
         }
         
-        LibraryController.catalogs.add(catalog);        
+        catalog.getCatalogs().add(catalog);
+        
+        LibraryController.catalogs.getCatalogs().add(catalog);        
     }
     
     public void addCatalogAndBooks(Catalog catalog, List<Book> books) {
-        if (LibraryController.catalogs.size() > 0){
-            catalog.setId(LibraryController.catalogs.get(LibraryController.catalogs.size() - 1).getId() + 1);
+        catalog.setBooks(new ArrayList<Book>());
+        if (LibraryController.catalogs.getCatalogs().size() > 0){
+            catalog.setId(LibraryController.catalogs.getCatalogs().get(LibraryController.catalogs.getCatalogs().size() - 1).getId() + 1);
         } else {
             catalog.setId(1);
         }
@@ -151,13 +157,13 @@ public class LibraryController {
             catalog.getBooks().add(book);
         }
         
-        LibraryController.catalogs.add(catalog);
+        LibraryController.catalogs.getCatalogs().add(catalog);
         
         this.saveData();
     }
     
     public void showCatalogs() {
-        if (LibraryController.catalogs.isEmpty()) {
+        if (LibraryController.catalogs.getCatalogs().isEmpty()) {
             this.print("No hay Catalogos registrados");
         } else {
             this.print("Libros registrados");
@@ -167,7 +173,7 @@ public class LibraryController {
             String idHeader = "ID";
             String nameHeader = "Nombre";
 
-            for (Catalog catalog: LibraryController.catalogs) {
+            for (Catalog catalog: LibraryController.catalogs.getCatalogs()) {
                 if (String.valueOf(catalog.getId()).length() > idSize) {
                     idSize = String.valueOf(catalog.getId()).length();
                 }
@@ -193,7 +199,7 @@ public class LibraryController {
             System.out.println(headerLine);
             System.out.println(line);
 
-            for (Catalog catalog : LibraryController.catalogs) {
+            for (Catalog catalog : LibraryController.catalogs.getCatalogs()) {
                 String id = String.valueOf(catalog.getId());
                 String name = catalog.getName();
 
@@ -224,7 +230,7 @@ public class LibraryController {
         int id = returnIntValue("Inserte el ID del catalogo que desea editar: ");
         
         Catalog catalogFounded = null;
-        for (Catalog catalog : LibraryController.catalogs) {
+        for (Catalog catalog : LibraryController.catalogs.getCatalogs()) {
             if (catalog.getId() == id) {
                 catalogFounded = catalog;
                 break;
@@ -254,8 +260,8 @@ public class LibraryController {
         switch (option) {
             case 1:
                 data = this.returnStringValue("Introduzca el nuevo nombre: ");
-                int indexCatalog = LibraryController.catalogs.indexOf(catalog);
-                LibraryController.catalogs.get(indexCatalog).setName(data);
+                int indexCatalog = LibraryController.catalogs.getCatalogs().indexOf(catalog);
+                LibraryController.catalogs.getCatalogs().get(indexCatalog).setName(data);
                 break;
             case 2: 
                 this.print("Edicion finalizada.");
@@ -268,7 +274,7 @@ public class LibraryController {
         
         int id = returnIntValue("Inserte el id del catalogo que desea administrar: ");
         
-        for (Catalog catalog : LibraryController.catalogs) {
+        for (Catalog catalog : LibraryController.catalogs.getCatalogs()) {
             if (catalog.getId() == id) {
                 this.showBookMenu(catalog);
                 return;
@@ -284,7 +290,7 @@ public class LibraryController {
         
         Catalog mainCatalog = null;
             
-        for (Catalog catalog : LibraryController.catalogs) {
+        for (Catalog catalog : LibraryController.catalogs.getCatalogs()) {
             if (catalog.getId() == id) {
                 mainCatalog = catalog;
                 //LibraryController.catalogs.remove(catalog);
@@ -309,19 +315,19 @@ public class LibraryController {
     public void deleteCatalogActions(int option, Catalog catalog) {
         switch (option) {
             case 1:
-                LibraryController.catalogs.remove(catalog);
+                LibraryController.catalogs.getCatalogs().remove(catalog);
                 this.print("Catalogo y libros eliminados.");
                 break;
             case 2:
                 int id = this.returnIntValue("Inserte el id del catalogo: ");
                 this.trasladarCatalog(id, catalog);
-                LibraryController.catalogs.remove(catalog);
+                LibraryController.catalogs.getCatalogs().remove(catalog);
                 break;
         }
     }
     
     public void trasladarCatalog(int id, Catalog catalog) {
-        for (Catalog catalogData : LibraryController.catalogs) {
+        for (Catalog catalogData : LibraryController.catalogs.getCatalogs()) {
             if (catalogData.getId() == id) {
                 for (Book book : catalog.getBooks()) {
                     book.setCatalogId(id);
@@ -422,7 +428,7 @@ public class LibraryController {
     public void addBook(Catalog catalog) {
         Book book = new Book();
         
-        int indexCatalog = LibraryController.catalogs.indexOf(catalog);
+        int indexCatalog = LibraryController.catalogs.getCatalogs().indexOf(catalog);
         int index = LibraryController.bookCount + 1;
         LibraryController.bookCount ++;
         
@@ -442,7 +448,7 @@ public class LibraryController {
         
         book.setId(index);
         
-        LibraryController.catalogs.get(catalog.getId() - 1).getBooks().add(book);
+        LibraryController.catalogs.getCatalogs().get(catalog.getId() - 1).getBooks().add(book);
         
         this.print("Libro insertado, ID: " + (index));
     }
@@ -457,8 +463,8 @@ public class LibraryController {
         Book book;
         
         try {
-            int indexCatalog = LibraryController.catalogs.indexOf(catalog);
-            book = LibraryController.catalogs.get(indexCatalog).getBooks().get(id - 1);
+            int indexCatalog = LibraryController.catalogs.getCatalogs().indexOf(catalog);
+            book = LibraryController.catalogs.getCatalogs().get(indexCatalog).getBooks().get(id - 1);
         } catch (Exception e) {
             book = null;
         }
@@ -495,32 +501,32 @@ public class LibraryController {
     public void editOption(int option, int bookId, Catalog catalog) {
         String data;
         
-        int indexCatalog = LibraryController.catalogs.indexOf(catalog);
+        int indexCatalog = LibraryController.catalogs.getCatalogs().indexOf(catalog);
         
         switch (option) {
             case 1:
                 data = this.returnStringValue("Introduzca el nuevo nombre: ");
-                LibraryController.catalogs.get(indexCatalog).getBooks().get(bookId).setName(data);
+                LibraryController.catalogs.getCatalogs().get(indexCatalog).getBooks().get(bookId).setName(data);
                 break;
             case 2:
                 data = this.returnStringValue("Introduzca el nuevo autor: ");
-                LibraryController.catalogs.get(indexCatalog).getBooks().get(bookId).setAuthors(data);
+                LibraryController.catalogs.getCatalogs().get(indexCatalog).getBooks().get(bookId).setAuthors(data);
                 break;
             case 3:
                 data = this.returnStringValue("Introduzca la nueva edicion: ");
-                LibraryController.catalogs.get(indexCatalog).getBooks().get(bookId).setEdiction(data);
+                LibraryController.catalogs.getCatalogs().get(indexCatalog).getBooks().get(bookId).setEdiction(data);
                 break;
             case 4:
                 data = this.returnStringValue("Introduzca el nuevo ISBN: ");
-                LibraryController.catalogs.get(indexCatalog).getBooks().get(bookId).setIsbn(data);
+                LibraryController.catalogs.getCatalogs().get(indexCatalog).getBooks().get(bookId).setIsbn(data);
                 break;
             case 5:
                 data = this.returnStringValue("Introduzca la nueva fecha: ");
-                LibraryController.catalogs.get(indexCatalog).getBooks().get(bookId).setDate(data);
+                LibraryController.catalogs.getCatalogs().get(indexCatalog).getBooks().get(bookId).setDate(data);
                 break;
             case 6:
                 data = this.returnStringValue("Introduzca la nueva ciudad: ");
-                LibraryController.catalogs.get(indexCatalog).getBooks().get(bookId).setCity(data);
+                LibraryController.catalogs.getCatalogs().get(indexCatalog).getBooks().get(bookId).setCity(data);
                 break;
             case 7:
                 this.print("Edicion finalizada.");
@@ -535,16 +541,16 @@ public class LibraryController {
         
         Book book;
         
-        int indexCatalog = LibraryController.catalogs.indexOf(catalog);
+        int indexCatalog = LibraryController.catalogs.getCatalogs().indexOf(catalog);
         
         try {
-            book = LibraryController.catalogs.get(indexCatalog).getBooks().get(id - 1);
+            book = LibraryController.catalogs.getCatalogs().get(indexCatalog).getBooks().get(id - 1);
         } catch (Exception e) {
             book = null;
         }
         
         if (book != null) {
-            LibraryController.catalogs.get(indexCatalog).getBooks().remove(book);
+            LibraryController.catalogs.getCatalogs().get(indexCatalog).getBooks().remove(book);
             this.print("El libro se ha eliminado exitosamente.");
         } else {
             this.print("No se ha encontrado el libro seleccionado");
@@ -686,9 +692,9 @@ public class LibraryController {
         
         int id = this.returnIntValue("Introduzca el ID del libro: ");
         
-        int indexCatalog = LibraryController.catalogs.indexOf(catalog);
+        int indexCatalog = LibraryController.catalogs.getCatalogs().indexOf(catalog);
         
-        for (Book book : LibraryController.catalogs.get(indexCatalog).getBooks()) {
+        for (Book book : LibraryController.catalogs.getCatalogs().get(indexCatalog).getBooks()) {
             if (book.getId() == id) {
                 this.print("Resultado");
                 System.out.println("ID      Nombre      Autores     Ediccion        ISBN        Fecha       Ciudad");
@@ -707,9 +713,9 @@ public class LibraryController {
         
         ArrayList<Book> booksFinded = null;
        
-        int indexCatalog = LibraryController.catalogs.indexOf(catalog);
+        int indexCatalog = LibraryController.catalogs.getCatalogs().indexOf(catalog);
         
-        for (Book book : LibraryController.catalogs.get(indexCatalog).getBooks()) {
+        for (Book book : LibraryController.catalogs.getCatalogs().get(indexCatalog).getBooks()) {
             if (book.getName().contains(name)) {
                 booksFinded.add(book);
             }
@@ -729,9 +735,9 @@ public class LibraryController {
         
         String isbn = this.returnStringValue("Introduzca el ISBN del libro: ");
         
-        int indexCatalog = LibraryController.catalogs.indexOf(catalog);
+        int indexCatalog = LibraryController.catalogs.getCatalogs().indexOf(catalog);
         
-        for (Book book : LibraryController.catalogs.get(indexCatalog).getBooks()) {
+        for (Book book : LibraryController.catalogs.getCatalogs().get(indexCatalog).getBooks()) {
             if (book.getIsbn().equals(isbn)) {
                 this.print("Resultado");
                 System.out.println("ID      Nombre      Autores     Ediccion        ISBN        Fecha       Ciudad");
@@ -759,15 +765,15 @@ public class LibraryController {
             switch (option) {
                 case 1:
                     PDFReport pdf = new PDFReport();
-                    pdf.generateReport(LibraryController.catalogs);
+                    pdf.generateReport(LibraryController.catalogs.getCatalogs());
                     break;
                 case 2:
                     EXCELReport excel = new EXCELReport();
-                    excel.generateReport(LibraryController.catalogs);
+                    excel.generateReport(LibraryController.catalogs.getCatalogs());
                     break;
                 case 3:
                     CSVReport csv = new CSVReport();
-                    csv.generateCSVReport(LibraryController.catalogs);
+                    csv.generateCSVReport(LibraryController.catalogs.getCatalogs());
                     break;            
             }
         } else {
@@ -789,10 +795,12 @@ public class LibraryController {
         if (this.validateOptions(option, 1, 2)) {
             switch (option) {
                 case 1:
-                    ExportJSON json = new ExportJSON(LibraryController.catalogs);
+                    ExportJSON json = new ExportJSON(LibraryController.catalogs.getCatalogs());
                     json.saveJSON();
                     break;
                 case 2:
+                    ExportXML xml = new ExportXML();
+                    xml.saveXML();
                     break;           
             }
         } else {
@@ -818,6 +826,8 @@ public class LibraryController {
                     json.loadJSONData();
                     break;
                 case 2:
+                    ImportXML xml = new ImportXML();
+                    xml.loadXMLData();
                     break;           
             }
         } else {
