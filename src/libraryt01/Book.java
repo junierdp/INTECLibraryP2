@@ -29,6 +29,16 @@ public class Book implements JSONStreamAware {
     private int catalogId;
     
     public Book(){}
+    
+    public Book(String authors, String name, String ediction, String isbn, String date, String city) {
+        super();
+        this.authors = authors;
+        this.name = name;
+        this.ediction = ediction;
+        this.isbn = isbn;
+        this.date = date;
+        this.city = city;
+    }
 
     public Book(int id, String authors, String name, String ediction, String isbn, String date, String city) {
         super();

@@ -90,6 +90,7 @@ public class Library {
                 LibraryController.get.showReportMenu();
                 break;
             case 7:
+                LibraryController.get.showImportMenu();
                 break;
             case 8:
                 LibraryController.get.showExportMenu();

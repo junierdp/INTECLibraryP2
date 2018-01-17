@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.io.*;
 import libraryt01.JSON.ExportJSON;
+import libraryt01.JSON.ImportJSON;
 import libraryt01.Reports.CSVReport;
 import libraryt01.Reports.EXCELReport;
 
@@ -16,6 +17,8 @@ import libraryt01.Reports.EXCELReport;
 public class LibraryController {
     
     public static List<Catalog> catalogs = new ArrayList<>();
+    public static int bookCount = 0;
+    
     public static LibraryController get = new LibraryController();
     private String catalogRoute = "";
     private String bookRoute = "";
@@ -53,6 +56,7 @@ public class LibraryController {
                 String[] bookData = bookLine.split("\\|");
                 Book book = new Book(Integer.parseInt(bookData[0]), bookData[1], bookData[2], bookData[3], bookData[4], bookData[5], bookData[6], Integer.parseInt(bookData[7]));
                 books.add(book);
+                LibraryController.bookCount ++;
             }
             
             FileReader catalogFileReader = new FileReader(new File(this.catalogRoute));
@@ -131,6 +135,25 @@ public class LibraryController {
         }
         
         LibraryController.catalogs.add(catalog);        
+    }
+    
+    public void addCatalogAndBooks(Catalog catalog, List<Book> books) {
+        if (LibraryController.catalogs.size() > 0){
+            catalog.setId(LibraryController.catalogs.get(LibraryController.catalogs.size() - 1).getId() + 1);
+        } else {
+            catalog.setId(1);
+        }
+        
+        for (Book book : books) {
+            int index = LibraryController.bookCount + 1;
+            LibraryController.bookCount ++;
+            book.setId(index);
+            catalog.getBooks().add(book);
+        }
+        
+        LibraryController.catalogs.add(catalog);
+        
+        this.saveData();
     }
     
     public void showCatalogs() {
@@ -400,7 +423,8 @@ public class LibraryController {
         Book book = new Book();
         
         int indexCatalog = LibraryController.catalogs.indexOf(catalog);
-        int index = LibraryController.catalogs.get(indexCatalog).getBooks().size() + 1;
+        int index = LibraryController.bookCount + 1;
+        LibraryController.bookCount ++;
         
         this.print("Agregar nuevo libro");
 
@@ -774,6 +798,31 @@ public class LibraryController {
         } else {
             System.out.println("Opción incorrecta.");
             this.showExportMenu();
+        }
+    }
+    
+    // Importar
+    public void showImportMenu() {
+        int option;
+        
+        this.print("============ Menú de importar ============");
+        System.out.println("1. Importar JSON.");
+        System.out.println("2. Importar XML.");
+        
+        option = this.returnIntValue("Seleccione una opción del menú: ");
+        
+        if (this.validateOptions(option, 1, 2)) {
+            switch (option) {
+                case 1:
+                    ImportJSON json = new ImportJSON();
+                    json.loadJSONData();
+                    break;
+                case 2:
+                    break;           
+            }
+        } else {
+            System.out.println("Opción incorrecta.");
+            this.showImportMenu();
         }
     }
 }
