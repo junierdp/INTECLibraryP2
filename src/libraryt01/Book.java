@@ -1,5 +1,11 @@
 package libraryt01;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.LinkedHashMap;
+import org.json.simple.JSONStreamAware;
+import org.json.simple.JSONValue;
+
 /**
  *
  * @author JunierDP
@@ -11,7 +17,7 @@ package libraryt01;
  * - Fecha
  * - Ciudad
  */
-public class Book {
+public class Book implements JSONStreamAware {
     
     private int id;
     private String authors;
@@ -23,8 +29,19 @@ public class Book {
     private int catalogId;
     
     public Book(){}
+    
+    public Book(String authors, String name, String ediction, String isbn, String date, String city) {
+        super();
+        this.authors = authors;
+        this.name = name;
+        this.ediction = ediction;
+        this.isbn = isbn;
+        this.date = date;
+        this.city = city;
+    }
 
     public Book(int id, String authors, String name, String ediction, String isbn, String date, String city) {
+        super();
         this.id = id;
         this.authors = authors;
         this.name = name;
@@ -35,6 +52,7 @@ public class Book {
     }
     
     public Book(int id, String authors, String name, String ediction, String isbn, String date, String city, int catalogId) {
+        super();
         this.id = id;
         this.authors = authors;
         this.name = name;
@@ -107,5 +125,17 @@ public class Book {
 
     public void setCatalogId(int catalogId) {
         this.catalogId = catalogId;
+    }
+
+    @Override
+    public void writeJSONString(Writer out) throws IOException {
+        LinkedHashMap obj = new LinkedHashMap();
+        obj.put("autor", this.authors);
+        obj.put("nombre", this.name);
+        obj.put("ediccion", this.ediction);
+        obj.put("isbn", this.isbn);
+        obj.put("fecha", this.date);
+        obj.put("ciudad", this.city);
+        JSONValue.writeJSONString(obj, out);
     }
 }

@@ -1,13 +1,18 @@
 package libraryt01;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import org.json.simple.JSONStreamAware;
+import org.json.simple.JSONValue;
 
 /**
  *
  * @author JunierDP
  */
-public class Catalog {
+public class Catalog implements JSONStreamAware {
     private int id;
     private String name;
     private List<Book> books = new ArrayList<>();
@@ -54,6 +59,14 @@ public class Catalog {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    @Override
+    public void writeJSONString(Writer out) throws IOException {
+        LinkedHashMap obj = new LinkedHashMap();
+        obj.put("nombre", this.name);
+        obj.put("libros", this.books);
+        JSONValue.writeJSONString(obj, out);
     }
  
 }
