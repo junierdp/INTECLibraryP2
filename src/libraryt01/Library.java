@@ -1,5 +1,6 @@
 package libraryt01;
 
+import libraryt01.JSON.ExportJSON;
 import java.io.File;
 import java.util.Scanner;
 
@@ -53,7 +54,7 @@ public class Library {
             
             option = this.returnIntValue();
             
-            if (LibraryController.get.validateOptions(option,1,6)) {
+            if (LibraryController.get.validateOptions(option,1,8)) {
                 this.mainMenuActions(option);
             }else{
                 LibraryController.get.print("Elija un numero entre las opciones del menu.");
@@ -87,6 +88,11 @@ public class Library {
                 break;
             case 6: 
                 LibraryController.get.showReportMenu();
+                break;
+            case 7:
+                break;
+            case 8:
+                LibraryController.get.showExportMenu();
                 break;
             case 9:
                 LibraryController.get.saveData();

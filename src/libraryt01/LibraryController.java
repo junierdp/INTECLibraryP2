@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.io.*;
+import libraryt01.JSON.ExportJSON;
 import libraryt01.Reports.CSVReport;
 import libraryt01.Reports.EXCELReport;
 
@@ -748,6 +749,31 @@ public class LibraryController {
         } else {
             System.out.println("Opción incorrecta.");
             this.showReportMenu();
+        }
+    }
+    
+    // Exportar
+    public void showExportMenu() {
+        int option;
+        
+        this.print("============ Menú de exportar ============");
+        System.out.println("1. Exportar en JSON.");
+        System.out.println("2. Exportar en XML.");
+        
+        option = this.returnIntValue("Seleccione una opción del menú: ");
+        
+        if (this.validateOptions(option, 1, 2)) {
+            switch (option) {
+                case 1:
+                    ExportJSON json = new ExportJSON(LibraryController.catalogs);
+                    json.saveJSON();
+                    break;
+                case 2:
+                    break;           
+            }
+        } else {
+            System.out.println("Opción incorrecta.");
+            this.showExportMenu();
         }
     }
 }
